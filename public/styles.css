@@ -1,0 +1,863 @@
+/* ============================================================================
+   Casaleña — estilos base. CSS propio, sin librerías.
+   Los colores se definen una vez como variables; el tema oscuro solo las redefine.
+   (El diseño completo y el responsive llegan en el paso 6.)
+   ============================================================================ */
+
+/* ---------- Tema claro (por defecto) ---------- */
+:root {
+    --bg:          #faf5ee;
+    --surface:     #ffffff;
+    --text:        #2b1d14;
+    --text-muted:  #7a6555;
+    --accent:      #c2410c;
+    --accent-dark: #9a3412;
+    --accent-soft: #fdebdd;
+    --danger:      #b91c1c;
+    --danger-soft: #fde8e8;
+    --success:     #3f6212;
+    --success-soft:#ecf5dc;
+    --border:      #eadfd2;
+    --input-border:#d6c4b1;
+
+    --radius:      12px;
+    --shadow:      0 2px 10px rgb(43 29 20 / 8%);
+    --font:        system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    color-scheme: light;
+}
+
+/* ---------- Tema oscuro ----------
+   Si el usuario nunca eligió, se sigue al sistema; si eligió, manda su elección. */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg:          #1a1411;
+        --surface:     #241c17;
+        --text:        #f3e9dc;
+        --text-muted:  #b5a291;
+        --accent:      #f97316;
+        --accent-dark: #fb923c;
+        --accent-soft: #3a2418;
+        --danger:      #f87171;
+        --danger-soft: #3b1d1d;
+        --success:     #a3e635;
+        --success-soft:#24301a;
+        --border:      #3a2e26;
+        --input-border:#56453a;
+        --shadow:      0 2px 10px rgb(0 0 0 / 35%);
+        color-scheme: dark;
+    }
+}
+
+:root[data-theme="dark"] {
+    --bg:          #1a1411;
+    --surface:     #241c17;
+    --text:        #f3e9dc;
+    --text-muted:  #b5a291;
+    --accent:      #f97316;
+    --accent-dark: #fb923c;
+    --accent-soft: #3a2418;
+    --danger:      #f87171;
+    --danger-soft: #3b1d1d;
+    --success:     #a3e635;
+    --success-soft:#24301a;
+    --border:      #3a2e26;
+    --input-border:#56453a;
+    --shadow:      0 2px 10px rgb(0 0 0 / 35%);
+    color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+}
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px 64px;
+}
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-dark); }
+
+code {
+    background: var(--accent-soft);
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.muted { color: var(--text-muted); font-weight: normal; }
+
+/* ---------- Cabecera ---------- */
+.site-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.main-nav { display: flex; gap: 16px; }
+.main-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.main-nav a:hover { color: var(--accent); }
+
+.user-area {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* ---------- Selector de tema: se ve solo el botón del tema contrario ---------- */
+.theme-switch { margin: 0; }
+
+.theme-switch button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.theme-switch button:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.theme-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.theme-switch svg { width: 18px; height: 18px; }
+
+.theme-switch .to-light { display: none; }
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-switch .to-dark  { display: none; }
+    :root:not([data-theme="light"]) .theme-switch .to-light { display: grid; }
+}
+
+:root[data-theme="dark"] .theme-switch .to-dark  { display: none; }
+:root[data-theme="dark"] .theme-switch .to-light { display: grid; }
+
+/* ---------- Avisos ---------- */
+.flash {
+    max-width: 960px;
+    margin: 16px auto 0;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+.flash-success { background: var(--success-soft); color: var(--success); }
+.flash-error   { background: var(--danger-soft);  color: var(--danger); }
+
+/* ---------- Botones ----------
+   Una sola forma (píldora) y tres variantes:
+   .button             principal: relleno con el color de la marca
+   .button.secondary   neutro: borde fino; toma el color de la marca al pasar el mouse
+   .button.danger      destructivo: borde fino; se tiñe de rojo al pasar el mouse
+   Tamaños: normal, .small y .block (a todo el ancho).
+   ------------------------------------------------------------------------- */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.button:hover {
+    border-color: var(--accent-dark);
+    background: var(--accent-dark);
+    color: #fff;
+    box-shadow: 0 2px 8px rgb(194 65 12 / 25%);
+}
+
+.button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.button.secondary {
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+}
+
+.button.secondary:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+    color: var(--accent);
+    box-shadow: none;
+}
+
+.button.danger {
+    border-color: var(--border);
+    background: var(--surface);
+    color: var(--danger);
+}
+
+.button.danger:hover {
+    border-color: var(--danger);
+    background: var(--danger-soft);
+    color: var(--danger);
+    box-shadow: none;
+}
+
+.button.small { gap: 6px; padding: 6px 14px; font-size: 14px; }
+.button.block { width: 100%; }
+
+.icon { width: 18px; height: 18px; flex-shrink: 0; }
+.button.small .icon, .main-nav .icon, .user-name .icon { width: 16px; height: 16px; }
+
+/* ---------- Tarjetas y formularios ---------- */
+.card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.auth { max-width: 460px; margin: 0 auto; }
+
+.form label {
+    display: block;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="number"],
+.form select {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    padding: 10px 12px;
+    font: inherit;
+    color: var(--text);
+    /* Mismo color que el panel donde está; el borde lo separa */
+    background: transparent;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+}
+
+/* La lista desplegable de un select no puede ser transparente */
+.form select option,
+.filters select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.form input:focus, .form select:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+.form fieldset {
+    margin: 0 0 14px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.form legend { padding: 0 6px; font-weight: 700; }
+
+
+.form-footer { margin-bottom: 0; color: var(--text-muted); }
+
+.hint h2 { margin-top: 0; font-size: 16px; }
+.hint p { margin: 4px 0; }
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.tag {
+    display: inline-block;
+    margin: 0;
+    padding: 2px 12px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.empty { color: var(--text-muted); }
+
+/* ---------- Carta ---------- */
+.menu-hero h1 { margin-bottom: 4px; }
+.menu-hero p { margin-top: 0; }
+
+/* Buscador, orden y botón: misma altura para los tres (--control-height). */
+.filters {
+    --control-height: 42px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.filters input[type="search"],
+.filters select,
+.filters .button {
+    height: var(--control-height);
+    margin: 0;
+    font: inherit;
+    line-height: 1;
+}
+
+.filters input[type="search"],
+.filters select {
+    padding: 0 16px;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--input-border);
+    border-radius: 999px;
+}
+
+.filters input[type="search"] { flex: 1; min-width: 200px; }
+
+.filters input[type="search"]:focus,
+.filters select:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+.filters select { padding-right: 36px; cursor: pointer; }
+
+.filters .button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 22px;
+    font-weight: 700;
+}
+
+.search-status {
+    margin: -8px 0 20px;
+    color: var(--text-muted);
+}
+
+.search-status a { font-weight: 600; }
+
+.menu-section { margin-top: 32px; }
+
+.menu-section h2 {
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--accent);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+
+.data-table .number { text-align: right; }
+.data-table .center { text-align: center; }
+
+.data-table.compact { box-shadow: none; border: 1px solid var(--border); }
+.data-table.compact th,
+.data-table.compact td { padding: 10px 14px; }
+.data-table .actions { text-align: right; white-space: nowrap; }
+.data-table .actions form { display: inline-block; margin-left: 6px; }
+
+.item-name { font-weight: 700; text-decoration: none; color: var(--text); }
+.item-name:hover { color: var(--accent); }
+
+.price { font-weight: 700; white-space: nowrap; }
+
+/* ---------- Páginas internas: ancho acotado y botón volver ---------- */
+.page-narrow {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.back-link { margin: 4px 0 16px; }
+
+.page-narrow.wide { max-width: 860px; }
+.page-narrow h1 { margin-top: 0; }
+
+/* Contador del carrito en la cabecera */
+.badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.empty-state { text-align: center; }
+.empty-state p { margin-top: 0; color: var(--text-muted); }
+
+/* ---------- Tarjeta: encabezado y acciones ---------- */
+.card { padding: 28px; }
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.card-header h1 { margin: 0; font-size: 24px; }
+
+.card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.card-actions form { margin: 0; }
+
+/* ---------- Detalle de un ítem ---------- */
+.item-detail-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.item-detail-header h1 { margin: 10px 0 0; font-size: 30px; line-height: 1.2; }
+
+.big-price {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+/* Los datos del ítem como mosaicos: se acomodan solos al ancho disponible */
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin: 24px 0 0;
+}
+
+.facts div {
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: var(--bg);
+}
+
+.facts dt {
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.facts dd { margin: 0; font-size: 17px; font-weight: 700; }
+
+/* ---------- Formulario de ítem ---------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+}
+
+.form-grid .span-2 { grid-column: span 2; }
+
+/* Tipo: dos opciones como un interruptor */
+.form .segmented {
+    display: inline-flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+
+.form .segmented legend {
+    float: left;
+    margin-right: 8px;
+    padding: 8px 0 0 10px;
+    font-weight: 700;
+}
+
+.form .segmented label {
+    margin: 0;
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.form .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+
+.form .segmented label:has(input:checked) { background: var(--accent); color: #fff; }
+.form .segmented label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Los datos de cada subtipo: mismo fondo que la tarjeta, separados por un borde */
+.subtype-panel {
+    margin-bottom: 16px;
+    padding: 16px 18px 2px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    background: transparent;
+}
+
+.subtype-panel h2 {
+    margin: 0 0 12px;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Solo se ve el panel del tipo elegido, sin JavaScript: :has() mira qué radio está marcado.
+   En la edición el tipo es fijo y la vista ya muestra un solo panel. */
+.item-form:has(input[name="type"][value="DISH"]:checked)  .drink-fields,
+.item-form:has(input[name="type"][value="DRINK"]:checked) .dish-fields {
+    display: none;
+}
+
+/* ---------- Favorito: el corazón se rellena si ya es favorito ---------- */
+.favorite-button.is-favorite { color: var(--accent); border-color: var(--accent-soft); }
+.favorite-button.is-favorite .icon { fill: currentColor; }
+
+/* ---------- Cantidad en el detalle ---------- */
+.quantity-form { display: flex; align-items: stretch; gap: 10px; margin: 0; }
+.quantity-form label { display: flex; margin: 0; }
+
+.quantity-form input {
+    width: 76px;
+    padding: 0 12px;
+    font: inherit;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid var(--input-border);
+    border-radius: 999px;
+    text-align: center;
+}
+
+/* ---------- Carrito ---------- */
+.stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.stepper button {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--input-border);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.stepper button:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+.stepper button:disabled { opacity: 0.4; cursor: not-allowed; }
+.stepper .icon { width: 14px; height: 14px; }
+.stepper span { min-width: 22px; font-weight: 700; text-align: center; }
+
+.checkout { margin-top: 20px; }
+
+.checkout-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.checkout-total strong { font-size: 26px; color: var(--accent); }
+
+.delivery-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 0 0 12px;
+    padding: 0;
+    border: none;
+}
+
+.delivery-options legend { margin-bottom: 10px; padding: 0; font-weight: 700; }
+
+/* Cada modalidad es una tarjeta elegible; la marcada se resalta con :has() */
+.option-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.option-card:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.option-card input { margin-top: 3px; accent-color: var(--accent); }
+.option-card span { display: grid; gap: 2px; }
+.option-card small { color: var(--text-muted); }
+
+.payment-note { margin: 0 0 16px; }
+
+/* ---------- Historial ---------- */
+.order-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.order-header h2 { margin: 0; font-size: 20px; }
+.order-header p { margin: 2px 0 0; }
+
+.order-total {
+    margin: 14px 0 0;
+    text-align: right;
+    font-size: 17px;
+}
+
+.order-total strong { margin-left: 8px; font-size: 20px; color: var(--accent); }
+
+.register-form:has(input[name="type"][value="CUSTOMER"]:checked) .admin-fields,
+.register-form:has(input[name="type"][value="ADMIN"]:checked)    .customer-fields {
+    display: none;
+}
+
+.form .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: center;
+    margin-top: 12px;
+}
+
+.form .checkbox input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+/* ---------- Pie ---------- */
+.site-footer {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+}
+
+/* ============================================================================
+   RESPONSIVE: pantallas angostas (teléfonos).
+
+   Los tres criterios de la letra:
+   1. Nada de scroll lateral: todo se acomoda al ancho de la pantalla.
+   2. La carta se lee sin arrastrar una tabla: cada fila pasa a ser un bloque
+      (display: block) y cada dato muestra su rótulo, que el ::before toma
+      del atributo data-label del HTML.
+   3. Botones para el dedo: al menos 44px de alto y separados entre sí.
+   ============================================================================ */
+
+@media (max-width: 700px) {
+
+    main { padding: 16px 14px 48px; }
+
+    /* Cabecera: marca y sesión en el primer renglón; las acciones del rol,
+       si las hay, en un segundo renglón. El orden visual lo da `order`. */
+    .site-header { gap: 10px; padding: 10px 14px; }
+    .brand { order: 1; }
+    .user-area { order: 2; gap: 8px; }
+    .user-name { display: none; }
+
+    .main-nav {
+        order: 3;
+        width: 100%;
+        gap: 16px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+    }
+
+    .main-nav a { min-height: 32px; }
+
+    /* Sin acciones para este rol (visitante): el segundo renglón no aparece */
+    .main-nav:not(:has(a)) { display: none; }
+
+    /* Botones cómodos para el dedo */
+    .button, .button.small { min-height: 44px; }
+    .theme-switch button { width: 44px; height: 44px; }
+
+    /* Filtros: el buscador ocupa todo el renglón; los combos se reparten el siguiente */
+    .filters input[type="search"] { flex: 1 1 100%; min-width: 0; }
+    .filters select { flex: 1 1 0; min-width: 0; }
+    .filters .button { flex: 1 1 100%; }
+
+    /* La carta: la tabla deja de ser tabla, cada ítem es una tarjeta */
+    .data-table thead { display: none; }
+
+    .data-table,
+    .data-table tbody,
+    .data-table tr,
+    .data-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .data-table {
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .data-table tr {
+        margin-bottom: 12px;
+        padding: 14px 16px;
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+    }
+
+    .data-table td {
+        padding: 3px 0;
+        border: none;
+        text-align: left;
+    }
+
+    .data-table td[data-label]::before {
+        content: attr(data-label) ": ";
+        font-weight: 700;
+        color: var(--text-muted);
+    }
+
+    /* El primer dato es el título de la tarjeta: no necesita rótulo */
+    .data-table td:first-child { margin-bottom: 4px; font-weight: 700; }
+    .data-table td:first-child::before { content: none; }
+    .data-table .item-name { font-size: 17px; }
+
+    .data-table .number,
+    .data-table .center { text-align: left; }
+
+    /* Dentro de una tarjeta (historial), las filas son bloques suaves sin sombra */
+    .data-table.compact { border: none; }
+    .data-table.compact tr { padding: 12px 14px; background: var(--bg); box-shadow: none; margin-bottom: 8px; }
+    .data-table.compact td { padding: 2px 0; }
+
+    .stepper button { width: 40px; height: 40px; }
+
+    .quantity-form { flex: 1 1 100%; }
+    .quantity-form .button { flex: 1; }
+
+    .delivery-options { grid-template-columns: 1fr; }
+
+    .data-table .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        white-space: normal;
+    }
+
+    .data-table .actions > * { flex: 1; }
+    .data-table .actions form { margin: 0; }
+    .data-table .actions .button { width: 100%; }
+
+    /* Detalle y formularios */
+    .card { padding: 20px; }
+    .item-detail-header h1 { font-size: 24px; }
+    .big-price { font-size: 22px; }
+
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid .span-2 { grid-column: auto; }
+
+    .card-actions > * { flex: 1; }
+    .card-actions form .button { width: 100%; }
+
+    /* Textos largos (emails, códigos) no empujan la página para el costado */
+    code { overflow-wrap: anywhere; }
+}
+
