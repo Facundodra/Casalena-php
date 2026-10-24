@@ -1,0 +1,11 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.idea/
+.vscode/
+
+# Configuración local de herramientas
+.claude/
+CLAUDE.md

@@ -1,0 +1,3 @@
+# Finales de línea LF en el repositorio, sin importar el sistema de quien clone
+# (los archivos corren dentro de contenedores Linux).
+* text=auto eol=lf

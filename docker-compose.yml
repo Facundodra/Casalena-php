@@ -1,0 +1,55 @@
+# Casaleña: PHP + Apache, MySQL y phpMyAdmin.
+#
+#   Levantar:               docker compose up -d --build
+#   Apagar:                 docker compose down
+#   Borrar todo y de cero:  docker compose down -v
+#
+# App: http://localhost:8090 · phpMyAdmin: http://localhost:8091
+
+services:
+
+  web:
+    build: .
+    container_name: casalena-web
+    ports:
+      - "8090:80"
+    volumes:
+      # Solo public/ es alcanzable por URL; app/ queda al lado, fuera del docroot.
+      - ./public:/var/www/html
+      - ./app:/var/www/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.4
+    container_name: casalena-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: casalena
+      MYSQL_USER: casalena
+      MYSQL_PASSWORD: casalena
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # Los .sql de esta carpeta corren solo la PRIMERA vez que se crea el volumen.
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ucasalena", "-pcasalena"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: casalena-phpmyadmin
+    ports:
+      - "8091:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+volumes:
+  db_data:
